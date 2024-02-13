@@ -1,20 +1,9 @@
 #include "shelpers.hpp"
 
-//////////////////////////////////////////////////////////////////////////////////
-//
-// Author: Ben Jones (I think) with a lot of clean up by J. Davison de St. Germain
-//
-// Date:   2019?
-//         Jan 2022 - Cleanup
-//
-// Class: CS 6013 - Systems I
-//
-//////////////////////////////////////////////////////////////////////////////////
-
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////
-// Example test commands you can try once your shell is up and running:
+// Example test commands you can try:
 //
 // ls
 // ls | nl
@@ -24,29 +13,9 @@ using namespace std;
 // cat shelpers.cpp | nl
 // cat shelpers.cpp | nl | head -50 | tail -10
 // cat shelpers.cpp | nl | head -50 | tail -10 > ten_lines.txt 
-//
-// - The following two commands are equivalent.  [data.txt is sent into nl and the
-//   output is saved to numbered_data.txt.]
-//
-// nl > numbered_data.txt < data.txt
-// nl < data.txt > numbered_data.txt 
-//
-// - Assuming numbered_data.txt has values in it... try running:
-//   [Note this probably doesn't work like one might expect...
-//    does it behave the same as your normal shell?]
-//
-// nl < numbered_data.txt > numbered_data.txt
-//
-// - The following line is an error (input redirection at end of line).
-//   It should fail gracefully (ie, 1) without doing anything, 2) cleaning
-//   up any file descriptors that were opened, 3) giving an appropriate
-//   message to the user).
-//
-// cat shelpers.cpp | nl | head -50 | tail -10 > ten_lines.txt < abc
 // 
 
 ////////////////////////////////////////////////////////////////////////
-// This routine is used by tokenize().  You do not need to modify it.
 
 bool splitOnSymbol(vector<string> & words, int i, char c )
 {
@@ -139,9 +108,6 @@ ostream& operator<<( ostream& outs, const Command& c )
 //
 // Returns an empty vector if the command line (tokens) is invalid.
 //
-// You'll need to fill in a few gaps in this function and add appropriate error handling
-// at the end.  Note, most of the gaps contain "assert( false )".
-//
 
 vector<Command> getCommands( const vector<string> & tokens )
 {
@@ -160,14 +126,14 @@ vector<Command> getCommands( const vector<string> & tokens )
          break;
       }
 
-      Command & command = commands[ cmdNumber ]; // Get reference to current Command struct.
+      // Get reference to current Command struct.
+      Command & command = commands[ cmdNumber ];
       command.execName = token;
 
       // Must _copy_ the token's string (otherwise, if token goes out of scope (anywhere)
-      // this pointer would become bad...) Note, this fixes a security hole in this code
-      // that had been here for quite a while.
+      // this pointer would become bad
 
-      command.argv.push_back( strdup( token.c_str() ) ); // argv0 == program name
+      command.argv.push_back( strdup( token.c_str() ) );
 
       command.inputFd  = STDIN_FILENO;
       command.outputFd = STDOUT_FILENO;
@@ -257,15 +223,6 @@ vector<Command> getCommands( const vector<string> & tokens )
    } // end for( cmdNumber = 0 to commands.size )
 
    if( error ){
-
-      // Close any file descriptors you opened in this function and return the appropriate data!
-
-      // Note, an error can happen while parsing any command. However, the "commands" vector is
-      // pre-populated with a set of "empty" commands and filled in as we go.  Because
-      // of this, a "command" name can be blank (the default for a command struct that has not
-      // yet been filled in).  (Note, it has not been filled in yet because the processing
-      // has not gotten to it when the error (in a previous command) occurred.
-
        //need to go through every command in the vector of commands
        for (Command& command : commands) {
            //close anything that isn't the default
