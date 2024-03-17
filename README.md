@@ -14,6 +14,7 @@ Example use of "grep" command
 
 
 <img width="400" alt="exampleCommands" src="https://github.com/SarahBateman22/DIYUnixShell/assets/142822160/addcdf4a-1e0f-4117-879c-1f0a29cc9bdd">
+
 <img width="400" alt="longCmd" src="https://github.com/SarahBateman22/DIYUnixShell/assets/142822160/31b1fe86-749f-4e7a-b449-4c405cdc9d04">
 
 Examples of piped commands with file redirection
